@@ -1,0 +1,12 @@
+.table {
+   overflow-y: scroll;
+   height: 400px;
+   > tr {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;
+   }
+   &__data:nth-of-type(odd) {
+      background-color: #f3f2f8;
+   }
+}
