@@ -8,15 +8,21 @@ import {
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import './styles/responsive.scss';
+import 'leaflet/dist/leaflet.css';
 import InfoBox from './components/InfoBox';
 import Table from './components/Table';
 import { sortData } from './components/ultilities';
+import Graph from './components/Graph';
+import Map from './components/Map';
 
 function App() {
    const [countries, setCountries] = useState([]);
    const [countryCode, setCountryCode] = useState('worldwide');
    const [country, setCountry] = useState({});
    const [tableData, setTableData] = useState([]);
+   const [mapCenter, setMapCenter] = useState([20, 0]);
+   const [mapZoom, setMapZoom] = useState(2);
+   const [mapCountries, setMapCountries] = useState([]);
 
    useEffect(() => {
       fetch('https://disease.sh/v3/covid-19/all')
@@ -32,6 +38,7 @@ function App() {
             .then((res) => res.json())
             .then((data) => {
                const countries = data.map((country) => ({
+                  id: country.countryInfo._id,
                   name: country.country, //United State, United Kingdom, Vietnam
                   value: country.countryInfo.iso2, // US, UK, VN
                }));
@@ -39,6 +46,7 @@ function App() {
                const sortedData = sortData(data);
                setCountries(countries);
                setTableData(sortedData);
+               setMapCountries(data);
             });
       };
       getCountriesApi();
@@ -58,8 +66,12 @@ function App() {
          .then((data) => {
             setCountryCode(countryCode);
             setCountry(data);
+
+            setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+            setMapZoom(5);
          });
    };
+
    return (
       <div className='app'>
          <div className='app__left'>
@@ -72,7 +84,7 @@ function App() {
                      value={countryCode}>
                      <MenuItem value='worldwide'>Worldwide</MenuItem>
                      {countries.map((country) => (
-                        <MenuItem value={country.value}>
+                        <MenuItem key={country.id} value={country.value}>
                            {country.name}
                         </MenuItem>
                      ))}
@@ -87,17 +99,18 @@ function App() {
                   total={country.cases}
                />
                <InfoBox
-                  title='Recovered'
+                  title='Recovered Cases'
                   todayCases={country.todayRecovered}
                   total={country.recovered}
                />
                <InfoBox
-                  title='Death'
+                  title='Death Cases'
                   todayCases={country.todayDeaths}
                   total={country.deaths}
                />
             </div>
             {/* MAP */}
+            <Map countries={mapCountries} center={mapCenter} zoom={mapZoom} />
          </div>
 
          <div className='app__right'>
@@ -109,6 +122,7 @@ function App() {
 
                   {/* Line Chart */}
                   <h3>Worldwide new cases</h3>
+                  <Graph />
                </CardContent>
             </Card>
          </div>

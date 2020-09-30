@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/Table.scss';
+import { numFormat } from './ultilities';
 
 function Table({ countries }) {
    return (
@@ -8,11 +9,14 @@ function Table({ countries }) {
             <th>Country</th>
             <th>Cases</th>
          </tr>
-         {countries.map(({ country, cases }) => (
+         {countries.map(({ country, cases, countryInfo }) => (
             <tr className='table__data'>
-               <td>{country}</td>
                <td>
-                  <strong>{cases}</strong>
+                  <img src={countryInfo.flag} alt='flag' />
+                  {country}
+               </td>
+               <td>
+                  <strong>{numFormat(cases)}</strong>
                </td>
             </tr>
          ))}

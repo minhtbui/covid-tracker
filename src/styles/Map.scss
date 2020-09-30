@@ -1,0 +1,29 @@
+.map {
+   height: 500px;
+   background-color: white;
+   padding: 1rem;
+   border-radius: 20px;
+   margin: 16px 0 0;
+   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+
+   > .leaflet-container {
+      height: 100%;
+   }
+}
+
+.popupMap {
+   &__container {
+      width: 150px;
+      font-size: 14px;
+   }
+   &__country {
+      font-size: 1rem;
+      font-weight: bold;
+
+      > img {
+         height: 15px;
+         width: 20px;
+         margin: 0 10px;
+      }
+   }
+}

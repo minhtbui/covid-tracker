@@ -5,6 +5,13 @@
       display: flex;
       justify-content: space-between;
       padding: 5px 10px;
+
+      img {
+         height: 15px;
+         width: 20px;
+         margin: 0 10px 0 0;
+         border-radius: 50%;
+      }
    }
    &__data:nth-of-type(odd) {
       background-color: #f3f2f8;

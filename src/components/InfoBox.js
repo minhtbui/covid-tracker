@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography } from '@material-ui/core';
 import React from 'react';
+import { numFormat } from './ultilities';
 
 function InfoBox({ title, todayCases, total }) {
    return (
@@ -9,10 +10,12 @@ function InfoBox({ title, todayCases, total }) {
                {title}
             </Typography>
 
-            <h3 className='infoBox__cases'>Today: {todayCases} cases</h3>
+            <h3 className='infoBox__cases'>
+               Today: {numFormat(todayCases, '0.0a')}
+            </h3>
 
             <Typography className='inforBox__total' color='textSecondary'>
-               Total: {total} cases
+               Total: {numFormat(total, '0.0a')}
             </Typography>
          </CardContent>
       </Card>
