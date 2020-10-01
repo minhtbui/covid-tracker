@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { numFormat } from './ultilities';
 
-function Graph() {
+function Graph({ casesType }) {
    const [data, setData] = useState({});
 
    useEffect(() => {
@@ -12,14 +12,14 @@ function Graph() {
          )
             .then((res) => res.json())
             .then((data) => {
-               const graphData = buildGraphData(data);
+               const graphData = buildGraphData(data, casesType);
                setData(graphData);
             });
       };
       fetchData();
-   }, []);
+   }, [casesType]);
 
-   const buildGraphData = (data, casesType = 'cases') => {
+   const buildGraphData = (data, casesType) => {
       const graphData = [];
       let lastDataPoint;
 
@@ -39,7 +39,7 @@ function Graph() {
    };
 
    return (
-      <div>
+      <div className='app__graph'>
          {data?.length > 0 && (
             <Line
                options={options}

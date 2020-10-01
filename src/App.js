@@ -20,9 +20,10 @@ function App() {
    const [countryCode, setCountryCode] = useState('worldwide');
    const [country, setCountry] = useState({});
    const [tableData, setTableData] = useState([]);
-   const [mapCenter, setMapCenter] = useState([20, 0]);
+   const [mapCenter, setMapCenter] = useState([0, 0]);
    const [mapZoom, setMapZoom] = useState(2);
    const [mapCountries, setMapCountries] = useState([]);
+   const [casesType, setCasesType] = useState('cases');
 
    useEffect(() => {
       fetch('https://disease.sh/v3/covid-19/all')
@@ -38,7 +39,6 @@ function App() {
             .then((res) => res.json())
             .then((data) => {
                const countries = data.map((country) => ({
-                  id: country.countryInfo._id,
                   name: country.country, //United State, United Kingdom, Vietnam
                   value: country.countryInfo.iso2, // US, UK, VN
                }));
@@ -50,7 +50,7 @@ function App() {
             });
       };
       getCountriesApi();
-   }, [countries]);
+   }, []);
 
    const onCountryChange = async (e) => {
       const countryCode = e.target.value;
@@ -67,8 +67,14 @@ function App() {
             setCountryCode(countryCode);
             setCountry(data);
 
-            setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-            setMapZoom(5);
+            countryCode === 'worldwide'
+               ? setMapCenter([0, 0])
+               : setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+            setTimeout(
+               () =>
+                  countryCode === 'worldwide' ? setMapZoom(2) : setMapZoom(5),
+               500,
+            );
          });
    };
 
@@ -83,8 +89,8 @@ function App() {
                      onChange={onCountryChange}
                      value={countryCode}>
                      <MenuItem value='worldwide'>Worldwide</MenuItem>
-                     {countries.map((country) => (
-                        <MenuItem key={country.id} value={country.value}>
+                     {countries.map((country, i) => (
+                        <MenuItem key={i} value={country.value}>
                            {country.name}
                         </MenuItem>
                      ))}
@@ -94,38 +100,48 @@ function App() {
 
             <div className='app__stats'>
                <InfoBox
+                  active={casesType === 'cases'}
                   title='Coronavirus Cases'
                   todayCases={country.todayCases}
                   total={country.cases}
+                  onClick={(e) => setCasesType('cases')}
                />
                <InfoBox
+                  isGreen
+                  active={casesType === 'recovered'}
                   title='Recovered Cases'
                   todayCases={country.todayRecovered}
                   total={country.recovered}
+                  onClick={(e) => setCasesType('recovered')}
                />
                <InfoBox
+                  active={casesType === 'deaths'}
                   title='Death Cases'
                   todayCases={country.todayDeaths}
                   total={country.deaths}
+                  onClick={(e) => setCasesType('deaths')}
                />
             </div>
             {/* MAP */}
-            <Map countries={mapCountries} center={mapCenter} zoom={mapZoom} />
+            <Map
+               casesType={casesType}
+               countries={mapCountries}
+               center={mapCenter}
+               zoom={mapZoom}
+            />
          </div>
 
-         <div className='app__right'>
-            <Card>
-               <CardContent>
-                  {/* Country LIST */}
-                  <h3>Live Cases by country</h3>
-                  <Table countries={tableData} />
+         <Card className='app__right'>
+            <CardContent>
+               {/* Country LIST */}
+               <h3>Live Cases by country</h3>
+               <Table countries={tableData} />
 
-                  {/* Line Chart */}
-                  <h3>Worldwide new cases</h3>
-                  <Graph />
-               </CardContent>
-            </Card>
-         </div>
+               {/* Line Chart */}
+               <h3>Worldwide new {casesType}</h3>
+               <Graph casesType={casesType} />
+            </CardContent>
+         </Card>
       </div>
    );
 }

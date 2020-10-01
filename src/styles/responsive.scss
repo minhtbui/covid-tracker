@@ -1,34 +1,35 @@
 @import 'mixin';
 //********* Responsive Media **********//
-$min_font: 12px;
-$max_font: 20px;
+$min_font: 6px;
+$max_font: 18px;
+
+html {
+   @include fluid-type(420px, 1365px, $min_font, $max_font);
+}
 /*  Tablets in landscape mode, older desktop monitors */
 @media only screen and (min-width: 1024px) and (max-width: 1365px) {
-   .app {
-      @include fluid-type(1024px, 1365px, $min_font, $max_font);
-   }
 }
 
 /*  Tablets in portrait mode, large display smartphones landscape mode */
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-   .app {
-      @include fluid-type(768px, 1023px, $min_font, $max_font);
-   }
 }
 
 /*  Smartphones in landscape mode */
 @media only screen and (min-width: 421px) and (max-width: 767px) {
    .app {
-      @include fluid-type(421px, 767px, $min_font, $max_font);
-      flex-wrap: wrap;
+      flex-direction: column;
+   }
+   .map {
+      height: 300px !important;
    }
 }
 
 /*  Smartphones in portrait mode  */
 @media only screen and (max-width: 420px) {
    .app {
-      @include fluid-type(0, 420px, $min_font, $max_font);
-      flex-wrap: wrap;
-      width: 100%;
+      flex-direction: column;
+   }
+   .map {
+      height: 300px !important;
    }
 }

@@ -1,0 +1,29 @@
+@import 'mixin';
+.infoBox {
+   flex: 1;
+   cursor: pointer;
+   &:not(:last-child) {
+      margin: 0 10px 0 0;
+   }
+
+   &--active {
+      @include active-box-red(true);
+   }
+   &--isGreen {
+      @include active-box-red(false);
+   }
+
+   &__todayCases {
+      color: #cc1034 !important;
+      font-weight: 600 !important;
+      font-size: 1.3rem !important;
+      margin: 5px 0 !important;
+      &--isGreen {
+         color: green !important;
+      }
+   }
+   &__total {
+      color: #6c757d !important;
+      font-weight: 700 !important;
+   }
+}

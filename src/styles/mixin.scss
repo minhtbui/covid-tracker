@@ -25,3 +25,12 @@
       }
    }
 }
+
+//********* Active **********//
+@mixin active-box-red($danger: true) {
+   @if $danger {
+      border-top: 5px solid #cc1034;
+   } @else {
+      border-color: greenyellow;
+   }
+}

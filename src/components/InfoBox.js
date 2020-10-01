@@ -1,20 +1,29 @@
 import { Card, CardContent, Typography } from '@material-ui/core';
 import React from 'react';
 import { numFormat } from './ultilities';
+import '../styles/InfoBox.scss';
 
-function InfoBox({ title, todayCases, total }) {
+function InfoBox({ isGreen, active, title, todayCases, total, ...props }) {
    return (
-      <Card className='infoBox'>
+      <Card
+         className={`infoBox ${active && 'infoBox--active'} ${
+            isGreen && 'infoBox--isGreen'
+         }`}
+         onClick={props.onClick}>
          <CardContent>
-            <Typography className='inforBox__title' color='textSecondary'>
+            <Typography className='infoBox__title' color='textSecondary'>
                {title}
             </Typography>
 
-            <h3 className='infoBox__cases'>
-               Today: {numFormat(todayCases, '0.0a')}
-            </h3>
+            <Typography
+               className={`infoBox__todayCases ${
+                  isGreen && 'infoBox__todayCases--isGreen'
+               }`}
+               color='textSecondary'>
+               Today: {numFormat(todayCases, '+0.0a')}
+            </Typography>
 
-            <Typography className='inforBox__total' color='textSecondary'>
+            <Typography className='infoBox__total' color='textSecondary'>
                Total: {numFormat(total, '0.0a')}
             </Typography>
          </CardContent>
